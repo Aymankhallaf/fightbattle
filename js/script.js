@@ -89,6 +89,11 @@ function getActivePlayers(players) {
   return players.filter((p) => p.life > 0);
 }
 
+function getDeadPlayers(players) {
+    return players.filter((p) => p.life <= 0);
+  }
+  
+
 /**
  * get ranodm attacker and players (it can't be the same personage).
  * @param {object} activePlayers a list of active players.
@@ -148,18 +153,42 @@ function getFightResult(attackerAndDefender) {
   };
 }
 
-
-
-function getMaxNameOfLst(list, scoreFieldname) {
+/**
+ * get the maximum name of list of objet.
+ * @param {array} list of object must have a name and score.
+ * @param {string} name the field name in text.
+ *  @param {string} scoreFieldname the score field name.
+ * @returns {array} list of a name and the maximum score.
+ */
+function getMaxNameOfLst(list, name, scoreFieldname) {
   let maxValue;
-  let name = "";
+  let requiedName = "";
   for (const obj of list) {
     if (obj[scoreFieldname] > maxValue || maxValue === undefined) {
-      maxValue = obj[name];
-      name = obj.name;
+      maxValue = obj[scoreFieldname];
+      requiedName = obj[name];
     }
   }
-  return name;
+  return [requiedName, maxValue];
+}
+
+/**
+ * get the minmum name of list of objet.
+ * @param {array} list of object must have a name and score.
+ * @param {string} name the field name in text.
+ *  @param {string} scoreFieldname the score field name.
+ * @returns {array} list of a name and the minmum score.
+ */
+function getMinNameOfLst(list, name, scoreFieldname) {
+  let minValue;
+  let requiedName = "";
+  for (const obj of list) {
+    if (obj[scoreFieldname] < minValue || minValue === undefined) {
+      minValue = obj[scoreFieldname];
+      requiedName = obj[name];
+    }
+  }
+  return [requiedName, minValue];
 }
 
 // game
@@ -176,4 +205,30 @@ while (!isGameOver(activePlayers)) {
 console.table(tournementResults);
 console.table(players);
 
-console.log("winner name", getMaxNameOfLst(players, "life"));
+console.log(
+  "winner name",
+  getMaxNameOfLst(players, "name", "life")[0],
+  "with life score",
+  getMaxNameOfLst(players, "name", "life")[1]
+);
+
+console.log(
+  "looser name",
+  getMinNameOfLst(players, "name", "life")[0],
+  "with life score",
+  getMinNameOfLst(players, "name", "life")[1]
+);
+
+console.log(
+  "The powerfull attack all the time",
+  getMaxNameOfLst(tournementResults, "Attacker name", "attack Points")[0],
+  "with score",
+  getMaxNameOfLst(tournementResults, "Attacker name", "attack Points")[1]
+);
+
+console.log(
+  "The powerfull defence all the time",
+  getMaxNameOfLst(tournementResults, "Defender name", "defend points")[0],
+  "with score",
+  getMaxNameOfLst(tournementResults, "Defender name", "defend points")[1]
+);
