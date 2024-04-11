@@ -94,8 +94,12 @@ function getActivePlayers(players) {
 //  * @param {object} activePlayers an object of active players
 //  * @returns {object} object of the winner/winners.
 //  */
-// function getTournamentWinner(activePlayers) {
-//   if (isGameOver(activePlayers)) return getActivePlayers(activePlayers);
+// function getTournamentWinner(tournementResults) {
+//     let tournementResults=[];
+//     let tournementResults.winner={};
+//   return tournementResults[
+//     tournementResults.winner[tournementResults.length - 1]
+//   ];
 // }
 
 /**
@@ -104,44 +108,40 @@ function getActivePlayers(players) {
  * @returns {array} [attacker, defender].
  */
 function getRandomAttackerAndDefender(activePlayers) {
-  attacker = getRandomArrayValue(activePlayers);
+  let attacker = getRandomArrayValue(activePlayers);
+  let defender;
   do {
     defender = getRandomArrayValue(activePlayers);
-  } while (defender === attacker);
+  } while (defender === attacker || defender === undefined);
   return [attacker, defender];
 }
 
-// /**
-//  * return the result of two fights. (rewite!!!!!)
-//  * @param {array} attackerAndDefender an array of two objects the first is the attacker attackerAndDefender[0]
-//  * the second is the  defender  attackerAndDefender[1] both are players in object form must have experience and shield Power and life properties.
-//  * @returns {object} object of object players.
-//  */
+
+
+
+console.log(attackRandom(players[0]));
 
 function getFightResult(attackerAndDefender) {
   let fightResult = {};
   fightResult.attacker = attackerAndDefender[0];
   fightResult.defender = attackerAndDefender[1];
-  fightResult.attacker.attackPoints = attackRandom(attacker);
-  fightResult.defender.defendPoints = defendRandom(defender);
-  if (attacker.attackPoints > defender.defendPoints) {
+  fightResult.attacker.attackPoints = attackRandom(fightResult.attacker);
+
+  fightResult.defender.defendPoints = defendRandom(fightResult.defender);
+  if (fightResult.defender.attackPoints > fightResult.defender.defendPoints) {
     fightResult.winner = fightResult.attacker;
     fightResult.looser = fightResult.defender;
-    fightResult.looser.life -= fightResult.winner.attackPoints;
+    fightResult.defender.life -= fightResult.attacker.attackPoints;
   } else {
     fightResult.winner = fightResult.defender;
     fightResult.looser = fightResult.attacker;
   }
-
+ 
   return fightResult;
 }
 
 
 
-console.table(getActivePlayers(players));
-
-console.table();
-console.table(getActivePlayers(players));
 
 tournementResults = [];
 let activePlayers = players;
@@ -152,8 +152,29 @@ while (!isGameOver(activePlayers)) {
   activePlayers = getActivePlayers(players);
 }
 
+//raw data
 console.table(tournementResults);
 console.table(players);
+
+let showAllResult = [];
+for (let result of tournementResults) {
+  let showResult = {
+    "Attacker name": result.attacker.name,
+    "Defender name": result.defender.name,
+    "winner name": result.winner.name,
+    "looser name": result.looser.name,
+    "attack Points": result.attacker.attackPoints,
+    "defend points": result.defender.defendPoints,
+    "attaker life": result.attacker.life,
+    "defender life": result.defender.life,
+  };
+  
+
+  showAllResult.push(showResult);
+}
+
+console.table(showAllResult);
+
 // while (!isGameOver(players)) {
 //   getTournamentWinner(activePlayers);
 //   let attackerAndDefender = getRandomAttackerAndDefender(activePlayers);
