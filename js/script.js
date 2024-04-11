@@ -107,9 +107,23 @@ function getActivePlayers(players) {
   return players.filter((p) => p.life > 0);
 }
 
+function getAllFightWinner(activePlayers) {
+   if (isGameOver(activePlayers)) return getActivePlayers(activePlayers);
+  }
+
+function getRandomAttackerAndDefender(activePlayers) {
+  attacker = activePlayers[Math.floor(Math.random() * activePlayers.length)];
+  do {
+    defender = activePlayers[Math.floor(Math.random() * activePlayers.length)];
+  } while (results.defender === results.attacker);
+}
 console.log(fightRound(players[2], players[1]));
 console.log(fightRound(players[0], players[3]));
 console.table(allResult);
+
+// while(){
+
+// }
 
 // while (notFinished) {
 //   let activePlayers = players.filter((p) => p.life > 0);
