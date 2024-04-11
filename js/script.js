@@ -52,9 +52,9 @@ let allResult = [];
 let notFinished = true;
 
 /**
- * Calcule an attack random  the equation,
+ * Calcule an attack random from this equation
  * (experience of player + random number from 0 until weapon power),
- * @param {object} attacker player in object form has experience and Weapan Power properties.
+ * @param {object} attacker player in object must have experience and Weapan Power properties ex. player1.experience.
  * @returns {number} a random attack points.
  */
 function attackRandom(attacker) {
@@ -62,9 +62,9 @@ function attackRandom(attacker) {
 }
 
 /**
- * Calcule an defence random  the equation,
+ * Calcule a defence random from this equation,
  * (experience of player + random number from 0 until shield power).
- * @param {object} defender a player in object form has experience and shield Power properties.
+ * @param {object} defender a player in object form must have experience and shield Power properties ex. player1.ShieldPower.
  * @returns {number} a random defence points.
  */
 function defendRandom(defender) {
@@ -82,7 +82,7 @@ function isGameOver(activePlayers) {
 
 /**
  * returns a list of players have life more than 0;
- * @param {object} players of object of players has life propertie.
+ * @param {object} players of object of players has life propertie ex. player.life.
  * @returns {object} the active player.
  */
 function getActivePlayers(players) {
@@ -90,9 +90,9 @@ function getActivePlayers(players) {
 }
 
 /**
- * get ranodm attacker and players (it can't be thE same personage).
+ * get ranodm attacker and players (it can't be the same personage).
  * @param {object} activePlayers a list of active players.
- * @returns {array} [attacker, defender].
+ * @returns {array} attacker object and defender in array  .
  */
 function getRandomAttackerAndDefender(activePlayers) {
   let attacker = getRandomArrayValue(activePlayers);
@@ -103,6 +103,24 @@ function getRandomAttackerAndDefender(activePlayers) {
   return [attacker, defender];
 }
 
+/**
+ * return the result of fight between two players
+ * @param {array} attackerAndDefender  array of two player object (they must have these properties like ex. {name: "Sara",
+    life: 50,
+    experience: 1,
+    WeapanPower: 1,
+    ShieldPower: 1, })
+ * @returns {object} the result of fight  {
+    "Attacker name": attacker.name,
+    "Defender name": defender.name,
+    "winner name": winner,
+    "looser name": looser,
+    "attack Points": attackPoints,
+    "defend points": defendPoints,
+    "attaker life": attacker.life,
+    "defender life": defender.life,
+  }
+ */
 function getFightResult(attackerAndDefender) {
   let winner = "";
   let looser = "";
@@ -130,6 +148,21 @@ function getFightResult(attackerAndDefender) {
   };
 }
 
+
+
+function getMaxNameOfLst(list, scoreFieldname) {
+  let maxValue;
+  let name = "";
+  for (const obj of list) {
+    if (obj[scoreFieldname] > maxValue || maxValue === undefined) {
+      maxValue = obj[name];
+      name = obj.name;
+    }
+  }
+  return name;
+}
+
+// game
 console.table(players);
 tournementResults = [];
 let activePlayers = players;
@@ -142,3 +175,5 @@ while (!isGameOver(activePlayers)) {
 
 console.table(tournementResults);
 console.table(players);
+
+console.log("winner name", getMaxNameOfLst(players, "life"));
