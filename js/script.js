@@ -82,13 +82,18 @@ function isGameOver(activePlayers) {
 
 /**
  * returns a list of players have life more than 0;
- * @param {object} players of object of players has life propertie ex. player.life.
+ * @param {object} players of object of players must have life propertie ex. player.life.
  * @returns {object} the active player.
  */
 function getActivePlayers(players) {
   return players.filter((p) => p.life > 0);
 }
 
+/**
+ * returns a list of deadplayer;
+ * @param {object} players of object of players has life propertie ex. player.life.
+ * @returns {object} the dead player.
+ */
 function getDeadPlayers(players) {
   return players.filter((p) => p.life <= 0);
 }
