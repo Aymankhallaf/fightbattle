@@ -26,7 +26,7 @@ players = [
   },
   {
     name: "Samir",
-    life: 50,
+    life: 0,
     experience: 7,
     WeapanPower: 7,
     ShieldPower: 4,
@@ -57,7 +57,6 @@ let notFinished = true;
  * @param {object} attacker player in object form has experience and Weapan Power properties.
  * @returns {number} a random attack points.
  */
-
 function attackRandom(attacker) {
   return attacker.experience + getRandomValue(attacker.WeapanPower);
 }
@@ -73,57 +72,97 @@ function defendRandom(defender) {
 }
 
 /**
- * return the result of two fights.
- * @param {object} attacker a player in object form has experience and shield Power and life properties.
- * @param {object} defender  a player in object form has experience and shield Power and life properties.
- * @returns {object} object of object players.
+ * check if the game is over by checking the number of activeplayer;
+ * @param {object} activePlayers object of players;
+ * @returns {boolean} return true (when there are only one active player) or false;
  */
-function fightRound(attacker, defender) {
-  let results = {};
-  let attackScore = attackRandom(attacker);
-  let defendScore = defendRandom(defender);
-  if (attackScore > defendScore) {
-    results.winner = attacker;
-    results.looser = defender;
-    defender.life -= attackScore;
-  } else {
-    results.winner = defender;
-    results.looser = attacker;
-  }
-  allResult.push(results);
-  return results;
+function isGameOver(activePlayers) {
+  return activePlayers.length === 1;
 }
 
 /**
- * check if the game is over;
- * @param {object} activePlayers object of players;
- * @returns {boolean} return true or false;
+ * returns a list of players have life more than 0;
+ * @param {object} players of object of players has life propertie.
+ * @returns {object} the active player.
  */
-function isGameOver(activePlayers) {
-  return activePlayers.length == 1;
-}
-
 function getActivePlayers(players) {
   return players.filter((p) => p.life > 0);
 }
 
-function getAllFightWinner(activePlayers) {
-   if (isGameOver(activePlayers)) return getActivePlayers(activePlayers);
+// /**
+//  * get the Tournament Winner by unsing two functions isGameOver() and getActivePlayers().
+//  * @param {object} activePlayers an object of active players
+//  * @returns {object} object of the winner/winners.
+//  */
+// function getTournamentWinner(activePlayers) {
+//   if (isGameOver(activePlayers)) return getActivePlayers(activePlayers);
+// }
+
+/**
+ * get ranodm attacker and players (it can't be thE same personage).
+ * @param {object} activePlayers a list of active players.
+ * @returns {array} [attacker, defender].
+ */
+function getRandomAttackerAndDefender(activePlayers) {
+  attacker = getRandomArrayValue(activePlayers);
+  do {
+    defender = getRandomArrayValue(activePlayers);
+  } while (defender === attacker);
+  return [attacker, defender];
+}
+
+// /**
+//  * return the result of two fights. (rewite!!!!!)
+//  * @param {array} attackerAndDefender an array of two objects the first is the attacker attackerAndDefender[0]
+//  * the second is the  defender  attackerAndDefender[1] both are players in object form must have experience and shield Power and life properties.
+//  * @returns {object} object of object players.
+//  */
+
+function getFightResult(attackerAndDefender) {
+  let fightResult = {};
+  fightResult.attacker = attackerAndDefender[0];
+  fightResult.defender = attackerAndDefender[1];
+  fightResult.attacker.attackPoints = attackRandom(attacker);
+  fightResult.defender.defendPoints = defendRandom(defender);
+  if (attacker.attackPoints > defender.defendPoints) {
+    fightResult.winner = fightResult.attacker;
+    fightResult.looser = fightResult.defender;
+    fightResult.looser.life -= fightResult.winner.attackPoints;
+  } else {
+    fightResult.winner = fightResult.defender;
+    fightResult.looser = fightResult.attacker;
   }
 
-function getRandomAttackerAndDefender(activePlayers) {
-  attacker = activePlayers[Math.floor(Math.random() * activePlayers.length)];
-  do {
-    defender = activePlayers[Math.floor(Math.random() * activePlayers.length)];
-  } while (results.defender === results.attacker);
+  return fightResult;
 }
-console.log(fightRound(players[2], players[1]));
-console.log(fightRound(players[0], players[3]));
-console.table(allResult);
 
-// while(){
 
+
+console.table(getActivePlayers(players));
+
+console.table();
+console.table(getActivePlayers(players));
+
+tournementResults = [];
+let activePlayers = players;
+while (!isGameOver(activePlayers)) {
+  let attackerAndDefender = getRandomAttackerAndDefender(activePlayers);
+  let result = getFightResult(attackerAndDefender);
+  tournementResults.push(result);
+  activePlayers = getActivePlayers(players);
+}
+
+console.table(tournementResults);
+console.table(players);
+// while (!isGameOver(players)) {
+//   getTournamentWinner(activePlayers);
+//   let attackerAndDefender = getRandomAttackerAndDefender(activePlayers);
+//   getWinnerAndLooser(attackerAndDefender);
+//   tournementResults.push(getfightRoundResult(attackerAndDefender));
+//   console.log(isGameOver);
+//   getActivePlayers(players);
 // }
+// console.table(tournementResults);
 
 // while (notFinished) {
 //   let activePlayers = players.filter((p) => p.life > 0);
