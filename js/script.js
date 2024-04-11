@@ -90,9 +90,8 @@ function getActivePlayers(players) {
 }
 
 function getDeadPlayers(players) {
-    return players.filter((p) => p.life <= 0);
-  }
-  
+  return players.filter((p) => p.life <= 0);
+}
 
 /**
  * get ranodm attacker and players (it can't be the same personage).
@@ -192,19 +191,30 @@ function getMinNameOfLst(list, name, scoreFieldname) {
 }
 
 // game
+
+console.info("Game starts");
 console.table(players);
-tournementResults = [];
+let tournementResults = [];
+let playersStatues = [];
 let activePlayers = players;
 while (!isGameOver(activePlayers)) {
   let attackerAndDefender = getRandomAttackerAndDefender(activePlayers);
   let result = getFightResult(attackerAndDefender);
+  let DeadPlayers = getDeadPlayers(players);
+  playersStatues.push(DeadPlayers);
   tournementResults.push(result);
   activePlayers = getActivePlayers(players);
 }
 
+//results
+console.info("Results");
 console.table(tournementResults);
+console.info("Dead list");
+console.table(playersStatues);
+console.info("player list after Tournement");
 console.table(players);
 
+console.info("Statics");
 console.log(
   "winner name",
   getMaxNameOfLst(players, "name", "life")[0],
