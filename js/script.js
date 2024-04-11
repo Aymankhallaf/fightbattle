@@ -47,9 +47,6 @@ players = [
   },
 ];
 
-let allResult = [];
-
-let notFinished = true;
 
 /**
  * Calcule an attack random from this equation
@@ -111,6 +108,7 @@ function getRandomAttackerAndDefender(activePlayers) {
   } while (defender === attacker || defender === undefined);
   return [attacker, defender];
 }
+
 
 /**
  * return the result of fight between two players
